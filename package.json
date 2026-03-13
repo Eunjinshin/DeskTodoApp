@@ -1,0 +1,25 @@
+{
+  "name": "weget-todo",
+  "version": "1.0.0",
+  "description": "보안 강화 Electron 기반 데스크톱 TODO 애플리케이션",
+  "main": "backend/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev:renderer": "cd frontend && npm run dev",
+    "build:renderer": "cd frontend && npm run build",
+    "build": "npm run build:renderer && electron-builder",
+    "test": "node tests/run.js"
+  },
+  "keywords": ["electron", "todo", "security", "sqlcipher"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "@journeyapps/sqlcipher": "^5.3.1",
+    "axios": "^1.6.0",
+    "uuid": "^9.0.0"
+  }
+}

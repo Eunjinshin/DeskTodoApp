@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!--
+    [보안] CSP 메타 태그 (추가 보안 레이어)
+    - 이 태그는 Main Process의 CSP 헤더와 이중으로 적용됩니다.
+    - script-src 'self': 외부 스크립트 로드를 차단하여 XSS 공격을 방어합니다.
+    - style-src 'unsafe-inline': Tailwind CSS의 인라인 스타일 허용 (React에서 필요).
+    - img-src 'self' data:: 로컬 이미지와 base64 이미지만 허용합니다.
+  -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+
+  <title>WeGet TODO</title>
+</head>
+<body>
+  <!-- React 앱이 마운트되는 루트 엘리먼트 -->
+  <div id="root"></div>
+
+  <!--
+    [보안] type="module"
+    - ES 모듈로 로드하면 strict mode가 자동 적용됩니다.
+    - strict mode에서는 일부 보안 취약점(eval 등)이 제한됩니다.
+  -->
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/**
+ * Tailwind + react-calendar Windows 스타일
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1e1e2e;
+  color: #e2e8f0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+#root { min-height: 100vh; }
+
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-brand text-white rounded-lg font-medium
+           transition-colors duration-200 hover:bg-brand-dark
+           focus:outline-none focus:ring-2 focus:ring-brand-light;
+  }
+  .btn-danger {
+    @apply px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm
+           transition-colors duration-200 hover:bg-red-700
+           focus:outline-none focus:ring-2 focus:ring-red-400;
+  }
+  .input-field {
+    @apply w-full px-3 py-2 bg-surface-card border border-gray-600
+           rounded-lg text-gray-200 placeholder-gray-500 text-sm
+           focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand;
+  }
+  .card {
+    @apply bg-surface-card rounded-xl p-3 border border-gray-700/50;
+  }
+}
+
+/* 스크롤바 */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #4a4a6a; border-radius: 2px; }
+
+/* ── react-calendar: Windows 기본 달력 느낌 (밝은 테마) ── */
+.win-calendar {
+  width: 100% !important;
+  background: #f8f9fa !important;
+  border: 1px solid #dee2e6 !important;
+  border-radius: 8px !important;
+  font-family: 'Segoe UI', 'Inter', sans-serif !important;
+  padding: 8px !important;
+}
+
+/* 네비게이션 (← 2026년 3월 →) */
+.win-calendar .react-calendar__navigation {
+  margin-bottom: 4px;
+}
+.win-calendar .react-calendar__navigation button {
+  color: #212529;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: transparent;
+  border-radius: 6px;
+  min-width: 32px;
+  height: 32px;
+}
+.win-calendar .react-calendar__navigation button:hover {
+  background: #e9ecef !important;
+}
+
+/* 요일 헤더 */
+.win-calendar .react-calendar__month-view__weekdays {
+  text-transform: none;
+  font-size: 0.75rem;
+  color: #868e96;
+  font-weight: 500;
+}
+.win-calendar .react-calendar__month-view__weekdays abbr {
+  text-decoration: none;
+}
+
+/* 날짜 타일 */
+.win-calendar .react-calendar__tile {
+  color: #343a40;
+  font-size: 0.8rem;
+  padding: 6px 4px;
+  border-radius: 6px;
+  background: transparent;
+  line-height: 1;
+}
+.win-calendar .react-calendar__tile:hover {
+  background: #e9ecef !important;
+}
+
+/* 오늘 */
+.win-calendar .react-calendar__tile--now {
+  background: #dbe4ff !important;
+  color: #364fc7;
+  font-weight: 700;
+}
+
+/* 선택된 날짜 */
+.win-calendar .react-calendar__tile--active {
+  background: #4263eb !important;
+  color: white !important;
+  font-weight: 600;
+}
+
+/* 다른 달 날짜 */
+.win-calendar .react-calendar__tile--neighboringMonth {
+  color: #ced4da;
+}
+
+/* 일요일 빨간색 */
+.win-calendar .react-calendar__month-view__days__day--weekend:first-of-type {
+  color: #e03131;
+}
