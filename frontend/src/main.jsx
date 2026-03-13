@@ -12,8 +12,8 @@
  */
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { TodoProvider } from './context/TodoContext';
-import App from './App';
+import { TodoProvider } from './context/TodoContext.jsx';
+import App from './App.jsx';
 
 // Tailwind CSS 글로벌 스타일 로드
 import './index.css';

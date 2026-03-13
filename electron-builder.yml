@@ -1,22 +1,22 @@
 appId: com.weget.todo
 productName: WeGet TODO
 directories:
-  output: dist
+  output: release
 
 # 코드 서명 (asar 변조 방지)
 asar: true
 
 # Windows 빌드 설정
 win:
-  target: nsis
-  icon: assets/icon.ico
+#  target: nsis
+#  icon: assets/icon.ico
 
 # macOS 빌드 설정
 mac:
-  target: dmg
-  icon: assets/icon.icns
+#  target: dmg
+#  icon: assets/icon.icns
 
 # Linux 빌드 설정
 linux:
-  target: AppImage
-  icon: assets/icon.png
+#  target: AppImage
+#  icon: assets/icon.png

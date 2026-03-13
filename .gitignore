@@ -1,5 +1,8 @@
 node_modules/
 dist/
+release/
+asar-out/
+package-extracted.json
 *.db
 *.key
 .env
@@ -8,6 +11,8 @@ dist/
 logs
 *.log
 npm-debug.log*
+build-error*.log
+builder-error.log
 
 # IDEs and editors
 .vscode/
