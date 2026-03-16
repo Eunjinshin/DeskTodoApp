@@ -18,29 +18,37 @@
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  // Tailwind 클래스를 사용하는 파일 경로
-  // 이 파일들을 스캔하여 사용된 클래스만 CSS에 포함
+  // html 요소에 'dark' 클래스 추가 시 dark: 접두사 유틸리티 활성화
+  darkMode: 'class',
+
+  // 모든 하위 폴더의 js, jsx 파일을 스캔하도록 설정
   content: [
     "./index.html",
-    "./src/**/*.{js,jsx}"
+    "./src/**/*.{js,ts,jsx,tsx}",
+    "./src/components/**/*.{js,jsx}",
   ],
 
   // 테마 확장: 프로젝트 전용 디자인 토큰 추가
   theme: {
     extend: {
-      // 커스텀 색상 (WeGet 브랜드 팔레트)
+      // 커스텀 색상 (핑크 라이트 테마)
       // 사용법: bg-brand, text-brand-light 등
       colors: {
         brand: {
-          DEFAULT: '#667eea',  // 기본 브랜드 색
-          light: '#818cf8',    // 밝은 브랜드
-          dark: '#4f46e5',     // 어두운 브랜드
-          accent: '#764ba2',   // 강조 색
+          DEFAULT: '#f2d5e0',  // 라이트 모드 핑크
+          light: '#f9edf2',
+          dark: '#dbb8c5',
+          accent: '#e5c1cf',
+          midnight: '#3b4270', // 다크 모드용 딥 블루 버튼
         },
         surface: {
-          DEFAULT: '#1e1e2e',  // 메인 배경
-          card: '#2a2a3e',     // 카드 배경
-          hover: '#353550',    // 호버 배경
+          DEFAULT: '#f5f5f5',  // 라이트 배경
+          card: '#ffffff',
+          hover: '#eeeeee',
+          // 다크 모드용
+          dark: '#121212',
+          darkCard: '#1e1e1e',
+          darkInput: '#1a1a1a',
         }
       },
 

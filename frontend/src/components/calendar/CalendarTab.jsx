@@ -1,7 +1,5 @@
 /**
- * 달력 탭 (3차 보완)
- * - 일정에 내용(content) 입력 및 표시 추가
- * - 내용 클릭으로 접기/펼치기
+ * 달력 탭 (다크 모드 지원)
  */
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import Calendar from 'react-calendar';
@@ -42,10 +40,10 @@ export default function CalendarTab() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [schedules, setSchedules] = useState([]);
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');   // 일정 내용
-  const [color, setColor] = useState('#667eea');
+  const [content, setContent] = useState('');
+  const [color, setColor] = useState('#f2d5e0');
   const [recurrence, setRecurrence] = useState('once');
-  const [expandedId, setExpandedId] = useState(null); // 펼쳐진 일정 ID
+  const [expandedId, setExpandedId] = useState(null);
 
   const loadSchedules = useCallback(async () => {
     try {
@@ -58,7 +56,7 @@ export default function CalendarTab() {
 
   useEffect(() => { loadSchedules(); }, [loadSchedules]);
 
-  const dateStr = selectedDate.toISOString().split('T')[0];
+  const dateStr = selectedDate.toLocaleDateString('en-CA'); // YYYY-MM-DD 포맷
 
   const daySchedules = useMemo(() =>
     schedules.filter(s => matchesDate(s, dateStr)),
@@ -97,67 +95,64 @@ export default function CalendarTab() {
 
   const tileContent = ({ date, view }) => {
     if (view !== 'month') return null;
-    const d = date.toISOString().split('T')[0];
+    const d = date.toLocaleDateString('en-CA');
     if (!schedules.some(s => matchesDate(s, d))) return null;
     return (
       <div className="flex justify-center mt-0.5">
-        <div className="w-1 h-1 rounded-full bg-blue-500" />
+        <div className="w-1 h-1 rounded-full bg-brand" />
       </div>
     );
   };
 
   return (
     <div className="p-3 sm:p-4 flex flex-col gap-3 animate-fadeIn">
-      {/* 달력 */}
-      <div className="calendar-wrapper rounded-lg overflow-hidden">
+      {/* 달력 Wrapper */}
+      <div className="calendar-wrapper w-full rounded-xl overflow-hidden shadow-sm dark:shadow-none border border-gray-100 dark:border-[#27272a] transition-colors duration-200">
         <Calendar
           onChange={setSelectedDate}
           value={selectedDate}
           locale="ko-KR"
           tileContent={tileContent}
-          className="win-calendar"
+          className="win-calendar w-full border-none"
           formatDay={(locale, date) => date.getDate()}
         />
       </div>
 
-      {/* 선택 날짜 일정 */}
-      <div className="card">
-        <h3 className="text-sm font-medium text-gray-300 mb-2">
+      {/* 일정 목록 및 폼 */}
+      <div className="card space-y-4">
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
           📅 {dateStr}
         </h3>
 
         {daySchedules.length === 0 && (
-          <p className="text-xs text-gray-500 mb-2">등록된 일정이 없습니다.</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 italic">등록된 일정이 없습니다.</p>
         )}
 
-        <div className="space-y-1 mb-3">
+        <div className="space-y-2">
           {daySchedules.map(s => (
-            <div key={s.id} className="group">
-              {/* 일정 헤더 */}
+            <div key={s.id} className="group border-b border-gray-50 dark:border-gray-700 pb-2 last:border-0">
               <div className="flex items-center gap-2 text-sm">
-                <div className="w-2 h-2 rounded-full flex-shrink-0"
-                     style={{ backgroundColor: s.color || '#667eea' }} />
-                {/* 클릭하면 내용 접기/펼치기 */}
+                <div className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+                     style={{ backgroundColor: s.color || '#f2d5e0' }} />
                 <button
                   onClick={() => setExpandedId(expandedId === s.id ? null : s.id)}
-                  className="flex-1 text-left text-gray-200 truncate hover:text-white transition-colors"
+                  className="flex-1 text-left text-gray-800 dark:text-gray-200 truncate font-medium hover:text-brand transition-colors"
                 >
                   {s.title}
-                  {s.content && <span className="text-gray-600 ml-1 text-xs">▾</span>}
+                  {s.content && <span className="text-gray-400 ml-1 text-xs">▾</span>}
                 </button>
-                {RECURRENCE_LABELS[s.recurrence] && (
-                  <span className="text-xs text-gray-500">{RECURRENCE_LABELS[s.recurrence]}</span>
-                )}
-                <button
-                  onClick={() => handleDelete(s.id)}
-                  className="text-gray-600 hover:text-red-400 text-xs
-                             opacity-0 group-hover:opacity-100 transition-opacity"
-                >✕</button>
+                <div className="flex items-center gap-2">
+                  {RECURRENCE_LABELS[s.recurrence] && (
+                    <span className="text-[10px] text-gray-400">{RECURRENCE_LABELS[s.recurrence]}</span>
+                  )}
+                  <button
+                    onClick={() => handleDelete(s.id)}
+                    className="text-gray-300 hover:text-red-400 transition-colors"
+                  >✕</button>
+                </div>
               </div>
-
-              {/* 일정 내용 (펼쳐진 경우) */}
               {expandedId === s.id && s.content && (
-                <p className="text-xs text-gray-400 ml-4 mt-1 bg-surface/50 rounded px-2 py-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 ml-4.5 mt-1 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-2.5 py-1.5">
                   {s.content}
                 </p>
               )}
@@ -165,43 +160,42 @@ export default function CalendarTab() {
           ))}
         </div>
 
-        {/* 일정 추가 폼 (내용 필드 추가) */}
-        <form onSubmit={handleAdd} className="space-y-2">
+        {/* 일정 추가 폼 */}
+        <form onSubmit={handleAdd} className="pt-2 border-t border-gray-100 dark:border-gray-700 space-y-2">
           <div className="flex gap-2">
             <input
               type="color"
               value={color}
               onChange={e => setColor(e.target.value)}
-              className="w-8 h-8 rounded cursor-pointer border-0 bg-transparent flex-shrink-0"
+              className="w-9 h-9 p-0 rounded-lg cursor-pointer border-0 bg-transparent flex-shrink-0"
             />
             <input
               type="text"
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="일정 제목..."
-              className="input-field flex-1 text-sm"
+              className="input-field flex-1"
               maxLength={100}
             />
           </div>
-          {/* 내용 입력 */}
           <textarea
             value={content}
             onChange={e => setContent(e.target.value)}
-            placeholder="일정 내용 (선택)"
-            className="input-field text-sm resize-none h-14"
+            placeholder="상세 설명 (선택)"
+            className="input-field h-16 resize-none"
             maxLength={1000}
           />
           <div className="flex gap-2">
             <select
               value={recurrence}
               onChange={e => setRecurrence(e.target.value)}
-              className="input-field flex-1 text-sm"
+              className="input-field flex-1"
             >
               {RECURRENCE_OPTIONS.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value} className="dark:bg-gray-800">{opt.label}</option>
               ))}
             </select>
-            <button type="submit" className="btn-primary text-sm px-3">추가</button>
+            <button type="submit" className="btn-primary w-24">추가</button>
           </div>
         </form>
       </div>

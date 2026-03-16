@@ -1,116 +1,148 @@
 /**
- * Tailwind + react-calendar Windows 스타일
+ * WeGet TODO - 테마 통합 관리 (강제 적용 버전)
  */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #1e1e2e;
-  color: #e2e8f0;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
+:root {
+  --brand-pink: #f2d5e0;
+  --bg-light: #f5f5f5;
+  --text-light: #333333;
+
+  /* 미드나잇 다크 모드 색상 */
+  --bg-midnight: #0c0c0e;
+  --card-midnight: #18181b;
+  --input-midnight: #111113;
+  --btn-midnight: #3b4270;
+  --text-midnight: #e2e8f0;
 }
-#root { min-height: 100vh; }
+
+/* ── 기본 레이아웃 (Light) ── */
+body {
+  margin: 0; padding: 0;
+  background-color: var(--bg-light);
+  color: var(--text-light);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  transition: background-color 0.2s ease;
+}
+
+#root > div { background-color: var(--bg-light); }
+.title-bar { background-color: rgba(255, 255, 255, 0.8); border-bottom: 1px solid #e5e7eb; }
+.tab-bar-container { background-color: #ffffff; }
+.filter-bar { background-color: #ffffff; border: 1px solid #f3f4f6; }
+
+/* ── 🌙 미드나잇 다크 모드 (Dark) 강제 적용 ── */
+html.dark body, 
+html.dark #root > div {
+  background-color: var(--bg-midnight) !important;
+  color: var(--text-midnight) !important;
+}
+
+html.dark .title-bar { background-color: rgba(12, 12, 14, 0.8) !important; border-bottom-color: #1f1f23 !important; }
+html.dark .tab-bar-container { background-color: var(--bg-midnight) !important; border-bottom-color: #1f1f23 !important; }
+html.dark .filter-bar { 
+  background-color: var(--card-midnight) !important; 
+  border: 1px solid #3f3f46 !important; 
+}
 
 @layer components {
+  /* [버튼] */
   .btn-primary {
-    @apply px-4 py-2 bg-brand text-white rounded-lg font-medium
-           transition-colors duration-200 hover:bg-brand-dark
-           focus:outline-none focus:ring-2 focus:ring-brand-light;
+    @apply w-full px-4 py-2.5 rounded-lg font-bold transition-all duration-200 flex items-center justify-center gap-2;
+    background-color: var(--brand-pink);
+    color: #55444a;
   }
-  .btn-danger {
-    @apply px-3 py-1.5 bg-red-600 text-white rounded-lg text-sm
-           transition-colors duration-200 hover:bg-red-700
-           focus:outline-none focus:ring-2 focus:ring-red-400;
+  html.dark .btn-primary {
+    background-color: var(--btn-midnight) !important;
+    color: #ffffff !important;
   }
+
+  /* [입력창] */
   .input-field {
-    @apply w-full px-3 py-2 bg-surface-card border border-gray-600
-           rounded-lg text-gray-200 placeholder-gray-500 text-sm
-           focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand;
+    @apply w-full px-3 py-2 bg-white border border-gray-200
+           rounded-lg text-gray-700 placeholder-gray-400 text-sm
+           focus:outline-none transition-colors;
   }
-  .card {
-    @apply bg-surface-card rounded-xl p-3 border border-gray-700/50;
+  html.dark .input-field,
+  html.dark select,
+  html.dark input[type="date"] {
+    background-color: var(--input-midnight) !important;
+    border: 1px solid #3f3f46 !important;
+    color: #ffffff !important;
   }
+
+  /* [카드] */
+  .todo-card {
+    @apply bg-white rounded-xl p-4 border border-gray-100 shadow-sm transition-colors;
+  }
+  html.dark .todo-card {
+    background-color: var(--card-midnight) !important;
+    border-color: #27272a !important;
+    box-shadow: none !important;
+  }
+  /* 제목 가독성 보강 */
+  html.dark .todo-title { color: #ffffff !important; }
+  html.dark .todo-content { color: #a1a1aa !important; }
 }
 
-/* 스크롤바 */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #4a4a6a; border-radius: 2px; }
+/* 탭 버튼 보정 */
+.tab-pills button.active { background-color: #f9fafb; color: var(--brand-pink); }
+html.dark .tab-pills button.active { background-color: #27272a !important; color: #ffffff !important; }
 
-/* ── react-calendar: Windows 기본 달력 느낌 (밝은 테마) ── */
-.win-calendar {
-  width: 100% !important;
-  background: #f8f9fa !important;
-  border: 1px solid #dee2e6 !important;
-  border-radius: 8px !important;
-  font-family: 'Segoe UI', 'Inter', sans-serif !important;
-  padding: 8px !important;
+/* 체크박스 */
+.circle-checkbox {
+  appearance: none; -webkit-appearance: none;
+  width: 20px; height: 20px;
+  border: 1.5px solid #ddd; border-radius: 50%;
+  cursor: pointer; position: relative;
+  background: white;
 }
+html.dark .circle-checkbox { border-color: #3f3f46; background: transparent; }
+.circle-checkbox:checked { background-color: var(--brand-pink) !important; border-color: var(--brand-pink) !important; }
+html.dark .circle-checkbox:checked { background-color: #52525b !important; border-color: #52525b !important; }
+.circle-checkbox:checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #333; font-size: 11px; }
+html.dark .circle-checkbox:checked::after { color: #fff; }
 
-/* 네비게이션 (← 2026년 3월 →) */
-.win-calendar .react-calendar__navigation {
-  margin-bottom: 4px;
-}
-.win-calendar .react-calendar__navigation button {
-  color: #212529;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background: transparent;
-  border-radius: 6px;
-  min-width: 32px;
-  height: 32px;
-}
-.win-calendar .react-calendar__navigation button:hover {
-  background: #e9ecef !important;
+/* ── react-calendar 다크 모드 정밀 보정 ── */
+.dark .react-calendar {
+  background-color: var(--card-midnight) !important;
+  color: #ffffff !important;
+  border-color: #27272a !important;
 }
 
-/* 요일 헤더 */
-.win-calendar .react-calendar__month-view__weekdays {
-  text-transform: none;
-  font-size: 0.75rem;
-  color: #868e96;
-  font-weight: 500;
-}
-.win-calendar .react-calendar__month-view__weekdays abbr {
-  text-decoration: none;
+.dark .react-calendar__navigation button,
+.dark .react-calendar__month-view__weekdays__weekday,
+.dark .react-calendar__month-view__days__day {
+  color: #ffffff !important;
 }
 
-/* 날짜 타일 */
-.win-calendar .react-calendar__tile {
-  color: #343a40;
-  font-size: 0.8rem;
-  padding: 6px 4px;
-  border-radius: 6px;
-  background: transparent;
-  line-height: 1;
-}
-.win-calendar .react-calendar__tile:hover {
-  background: #e9ecef !important;
+.dark .react-calendar__tile:enabled:hover,
+.dark .react-calendar__tile:enabled:focus {
+  background-color: #27272a !important;
 }
 
-/* 오늘 */
-.win-calendar .react-calendar__tile--now {
-  background: #dbe4ff !important;
-  color: #364fc7;
-  font-weight: 700;
+.dark .react-calendar__tile--now {
+  background-color: #3b427044 !important;
+  color: #3b4270 !important;
+  font-weight: bold;
 }
 
-/* 선택된 날짜 */
-.win-calendar .react-calendar__tile--active {
-  background: #4263eb !important;
+.dark .react-calendar__tile--active {
+  background: var(--btn-midnight) !important;
   color: white !important;
-  font-weight: 600;
 }
 
-/* 다른 달 날짜 */
-.win-calendar .react-calendar__tile--neighboringMonth {
-  color: #ced4da;
+.dark .react-calendar__tile--neighboringMonth {
+  color: #4b5563 !important; /* 지난달/다음달 날짜는 약간 어둡게 */
 }
 
-/* 일요일 빨간색 */
-.win-calendar .react-calendar__month-view__days__day--weekend:first-of-type {
-  color: #e03131;
+.dark .react-calendar__navigation button:enabled:hover,
+.dark .react-calendar__navigation button:enabled:focus {
+  background-color: #27272a !important;
+}
+
+.dark .react-calendar__month-view__weekdays__weekday abbr {
+  text-decoration: none;
+  font-weight: bold;
 }
