@@ -14,6 +14,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ThemeProvider } from './context/ThemeContext.jsx';
 import { TodoProvider } from './context/TodoContext.jsx';
+import { WindowProvider } from './context/WindowContext.jsx';
 import App from './App.jsx';
 
 // Tailwind CSS 글로벌 스타일 로드
@@ -22,10 +23,12 @@ import './index.css';
 // React 앱을 #root 엘리먼트에 마운트
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider>
-      <TodoProvider>
-        <App />
-      </TodoProvider>
-    </ThemeProvider>
+    <WindowProvider>
+      <ThemeProvider>
+        <TodoProvider>
+          <App />
+        </TodoProvider>
+      </ThemeProvider>
+    </WindowProvider>
   </StrictMode>,
 );

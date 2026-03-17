@@ -5,11 +5,12 @@
  */
 import { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { setOpacity, pinWindow, unpinWindow } from '../../api/windowApi';
+import { useWindow } from '../../context/WindowContext';
+import { setOpacity } from '../../api/windowApi';
 
 export default function SettingsTab() {
+  const { isPinned, togglePin } = useWindow();
   const [opacity, setOpacityState] = useState(1);
-  const [pinned, setPinned] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   /** 투명도 변경 */
@@ -23,16 +24,7 @@ export default function SettingsTab() {
     }
   };
 
-  /** 핀 토글 */
-  const handlePin = async () => {
-    try {
-      if (pinned) await unpinWindow();
-      else await pinWindow();
-      setPinned(!pinned);
-    } catch (err) {
-      console.error('핀 토글 실패:', err);
-    }
-  };
+  // togglePin은 이제 WindowContext에서 담당하므로 SettingsTab 내부의 핀 토글 로직은 제거합니다.
 
   return (
     <div className="p-4 space-y-6 animate-fadeIn">
@@ -89,14 +81,17 @@ export default function SettingsTab() {
           </p>
         </div>
         <button
-          onClick={handlePin}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors
-            ${pinned
-              ? 'bg-brand text-white'
+          onClick={togglePin}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2
+            ${isPinned
+              ? 'bg-brand text-white shadow-md scale-95'
               : 'bg-gray-100 dark:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200'
             }`}
         >
-          {pinned ? 'ON' : 'OFF'}
+          <span className={`transition-transform duration-300 ${isPinned ? 'rotate-[45deg]' : 'rotate-0'}`}>
+            {isPinned ? '📍' : '📌'}
+          </span>
+          {isPinned ? 'ON' : 'OFF'}
         </button>
       </div>
 

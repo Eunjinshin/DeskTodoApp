@@ -4,24 +4,15 @@
  * [타이틀바 구조]
  * 좌: 앱 제목 | 우: 다크모드 토글 + 핀 + 최소화 + 닫기
  */
-import { useState } from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import { pinWindow, unpinWindow, minimizeWindow, closeWindow } from '../../api/windowApi';
+import { useWindow } from '../../context/WindowContext';
+import { minimizeWindow, closeWindow } from '../../api/windowApi';
 
 export default function TitleBar() {
-  const [pinned, setPinned] = useState(false);
+  const { isPinned, togglePin } = useWindow();
   const { isDark, toggleTheme } = useTheme();
 
-  /** 핀 토글 */
-  const handlePin = async () => {
-    try {
-      if (pinned) await unpinWindow();
-      else await pinWindow();
-      setPinned(!pinned);
-    } catch (err) {
-      console.error('핀 토글 실패:', err);
-    }
-  };
+  // togglePin은 이제 WindowContext에서 담당하므로 TitleBar 내부의 핀 토글 로직은 제거합니다.
 
   return (
     <div
@@ -50,13 +41,18 @@ export default function TitleBar() {
 
         {/* 핀 버튼 */}
         <button
-          onClick={handlePin}
+          onClick={togglePin}
           className={`w-7 h-7 rounded-md flex items-center justify-center text-sm
-                     transition-colors hover:bg-gray-100 dark:hover:bg-gray-700
-                     ${pinned ? 'text-brand' : 'text-gray-400'}`}
-          title={pinned ? '핀 해제' : '항상 앞에'}
+                     transition-all duration-300
+                     ${isPinned 
+                        ? 'bg-brand text-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.2)] scale-90' 
+                        : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                     }`}
+          title={isPinned ? '핀 해제' : '항상 앞에'}
         >
-          📌
+          <span className={`transition-transform duration-300 ${isPinned ? 'rotate-[45deg]' : 'rotate-0'}`}>
+            📌
+          </span>
         </button>
 
         {/* 최소화 */}

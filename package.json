@@ -1,6 +1,6 @@
 {
   "name": "weget-todo",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "보안 강화 Electron 기반 데스크톱 TODO 애플리케이션",
   "main": "backend/index.js",
   "scripts": {
@@ -10,7 +10,12 @@
     "build": "npm run build:renderer && electron-builder",
     "test": "node tests/run.js"
   },
-  "keywords": ["electron", "todo", "security", "sqlcipher"],
+  "keywords": [
+    "electron",
+    "todo",
+    "security",
+    "sqlcipher"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {

@@ -80,6 +80,7 @@ npm run build
 ├── frontend/           # Renderer Process (React, Tailwind UI)
 ├── preload/            # Context Bridge (통찰력 있는 통신 통로)
 ├── doc/                # 설계 및 기능 명세서
+|   └── Issue_log/      # 이슈 기록
 └── certs/              # 무결성 검증용 인증서
 ```
 
